@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace jm_sql.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,19 +25,6 @@ namespace jm_sql.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Actors", x => x.ActorId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Directors",
-                columns: table => new
-                {
-                    DirectorId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Directors", x => x.DirectorId);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,18 +50,11 @@ namespace jm_sql.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     Runtime = table.Column<int>(type: "integer", nullable: false),
                     Rating = table.Column<string>(type: "text", nullable: false),
-                    ReleaseDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    DirectorId = table.Column<int>(type: "integer", nullable: false)
+                    ReleaseDate = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.MovieId);
-                    table.ForeignKey(
-                        name: "FK_Movies_Directors_DirectorId",
-                        column: x => x.DirectorId,
-                        principalTable: "Directors",
-                        principalColumn: "DirectorId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,18 +131,6 @@ namespace jm_sql.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Directors",
-                columns: new[] { "DirectorId", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Gil Junger" },
-                    { 2, "Martin Scorsese" },
-                    { 3, "Mary Harron" },
-                    { 4, "Shawn Levy" },
-                    { 5, "Russo Brothers" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Genres",
                 columns: new[] { "GenreId", "Name" },
                 values: new object[,]
@@ -191,14 +159,14 @@ namespace jm_sql.Migrations
 
             migrationBuilder.InsertData(
                 table: "Movies",
-                columns: new[] { "MovieId", "Description", "DirectorId", "Rating", "ReleaseDate", "Runtime", "Title" },
+                columns: new[] { "MovieId", "Description", "Rating", "ReleaseDate", "Runtime", "Title" },
                 values: new object[,]
                 {
-                    { 1, null, 0, "PG-13", new DateOnly(1999, 3, 31), 97, "10 Things I Hate About You" },
-                    { 2, null, 0, "R", new DateOnly(2013, 12, 25), 180, "The Wolf of Wall Street" },
-                    { 3, null, 0, "R", new DateOnly(2000, 4, 14), 104, "American Psycho" },
-                    { 4, null, 0, "PG", new DateOnly(2006, 12, 17), 108, "Night at the Museum" },
-                    { 5, null, 0, "PG-13", new DateOnly(2019, 4, 26), 181, "Avengers: Endgame" }
+                    { 1, null, "PG-13", new DateOnly(1999, 3, 31), 97, "10 Things I Hate About You" },
+                    { 2, null, "R", new DateOnly(2013, 12, 25), 180, "The Wolf of Wall Street" },
+                    { 3, null, "R", new DateOnly(2000, 4, 14), 104, "American Psycho" },
+                    { 4, null, "PG", new DateOnly(2006, 12, 17), 108, "Night at the Museum" },
+                    { 5, null, "PG-13", new DateOnly(2019, 4, 26), 181, "Avengers: Endgame" }
                 });
 
             migrationBuilder.InsertData(
@@ -237,11 +205,6 @@ namespace jm_sql.Migrations
                 name: "IX_GenreMovie_MoviesMovieId",
                 table: "GenreMovie",
                 column: "MoviesMovieId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movies_DirectorId",
-                table: "Movies",
-                column: "DirectorId");
         }
 
         /// <inheritdoc />
@@ -261,9 +224,6 @@ namespace jm_sql.Migrations
 
             migrationBuilder.DropTable(
                 name: "Movies");
-
-            migrationBuilder.DropTable(
-                name: "Directors");
         }
     }
 }

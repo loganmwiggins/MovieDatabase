@@ -7,7 +7,7 @@ public class MoviesDbContext : DbContext
     public DbSet<Actor> Actors { get; set; }
     public DbSet<Character> Characters { get; set; }
     public DbSet<Genre> Genres { get; set; }
-    public DbSet<Director> Directors { get; set; }
+    //public DbSet<Director> Directors { get; set; }
  
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -28,20 +28,20 @@ public class MoviesDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Seeding tables with data    
-        modelBuilder.Entity<Director>().HasData(
-            new Director { DirectorId = 1, Name = "Gil Junger" },
-            new Director { DirectorId = 2, Name = "Martin Scorsese" },
-            new Director { DirectorId = 3, Name = "Mary Harron" },
-            new Director { DirectorId = 4, Name = "Shawn Levy" },
-            new Director { DirectorId = 5, Name = "Russo Brothers" }
-        );
+        //modelBuilder.Entity<Director>().HasData(
+        //    new Director { DirectorId = 1, Name = "Gil Junger" },
+        //    new Director { DirectorId = 2, Name = "Martin Scorsese" },
+        //    new Director { DirectorId = 3, Name = "Mary Harron" },
+        //    new Director { DirectorId = 4, Name = "Shawn Levy" },
+        //    new Director { DirectorId = 5, Name = "Russo Brothers" }
+        //);
 
         modelBuilder.Entity<Movie>().HasData(
-            new Movie { MovieId = 1, DirectorId = 1, Title = "10 Things I Hate About You", Runtime = 97, Rating = "PG-13", ReleaseDate = new DateOnly(1999, 3, 31) },
-            new Movie { MovieId = 2, DirectorId = 2, Title = "The Wolf of Wall Street", Runtime = 180, Rating = "R", ReleaseDate = new DateOnly(2013, 12, 25) },
-            new Movie { MovieId = 3, DirectorId = 3, Title = "American Psycho", Runtime = 104, Rating = "R", ReleaseDate = new DateOnly(2000, 4, 14) },
-            new Movie { MovieId = 4, DirectorId = 4,  Title = "Night at the Museum", Runtime = 108, Rating = "PG", ReleaseDate = new DateOnly(2006, 12, 17) },
-            new Movie { MovieId = 5, DirectorId = 5, Title = "Avengers: Endgame", Runtime = 181, Rating = "PG-13", ReleaseDate = new DateOnly(2019, 4, 26) }
+            new Movie { MovieId = 1, Title = "10 Things I Hate About You", Runtime = 97, Rating = "PG-13", ReleaseDate = new DateOnly(1999, 3, 31) },
+            new Movie { MovieId = 2, Title = "The Wolf of Wall Street", Runtime = 180, Rating = "R", ReleaseDate = new DateOnly(2013, 12, 25) },
+            new Movie { MovieId = 3, Title = "American Psycho", Runtime = 104, Rating = "R", ReleaseDate = new DateOnly(2000, 4, 14) },
+            new Movie { MovieId = 4, Title = "Night at the Museum", Runtime = 108, Rating = "PG", ReleaseDate = new DateOnly(2006, 12, 17) },
+            new Movie { MovieId = 5, Title = "Avengers: Endgame", Runtime = 181, Rating = "PG-13", ReleaseDate = new DateOnly(2019, 4, 26) }
         );
 
         modelBuilder.Entity<Genre>().HasData(

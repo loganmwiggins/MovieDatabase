@@ -11,9 +11,9 @@ public class Movie
     public required DateOnly ReleaseDate { get; set; }
 
 
-    [ForeignKey("Director")]
-    public int DirectorId { get; set; }
-    public Director Director { get; set; } = null!;
+    //[ForeignKey("Director")]
+    //public int DirectorId { get; set; }
+    //public Director Director { get; set; } = null!;
 
 
     // Used to make middle tables automatically
@@ -60,10 +60,10 @@ public class Actor
 }
 
 
-public class Director
-{
-    public int DirectorId { get; set; }
-    public required string Name { get; set; }
+//public class Director
+//{
+//    public int DirectorId { get; set; }
+//    public required string Name { get; set; }
 
-    public List<Movie> Movies { get; } = [];
-}
+//    public List<Movie> Movies { get; } = [];
+//}

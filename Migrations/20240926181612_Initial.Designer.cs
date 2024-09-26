@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace jm_sql.Migrations
 {
     [DbContext(typeof(MoviesDbContext))]
-    [Migration("20240926150826_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240926181612_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -251,50 +251,6 @@ namespace jm_sql.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Director", b =>
-                {
-                    b.Property<int>("DirectorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DirectorId"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("DirectorId");
-
-                    b.ToTable("Directors");
-
-                    b.HasData(
-                        new
-                        {
-                            DirectorId = 1,
-                            Name = "Gil Junger"
-                        },
-                        new
-                        {
-                            DirectorId = 2,
-                            Name = "Martin Scorsese"
-                        },
-                        new
-                        {
-                            DirectorId = 3,
-                            Name = "Mary Harron"
-                        },
-                        new
-                        {
-                            DirectorId = 4,
-                            Name = "Shawn Levy"
-                        },
-                        new
-                        {
-                            DirectorId = 5,
-                            Name = "Russo Brothers"
-                        });
-                });
-
             modelBuilder.Entity("Genre", b =>
                 {
                     b.Property<int>("GenreId")
@@ -440,9 +396,6 @@ namespace jm_sql.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int>("DirectorId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Rating")
                         .IsRequired()
                         .HasColumnType("text");
@@ -459,15 +412,12 @@ namespace jm_sql.Migrations
 
                     b.HasKey("MovieId");
 
-                    b.HasIndex("DirectorId");
-
                     b.ToTable("Movies");
 
                     b.HasData(
                         new
                         {
                             MovieId = 1,
-                            DirectorId = 1,
                             Rating = "PG-13",
                             ReleaseDate = new DateOnly(1999, 3, 31),
                             Runtime = 97,
@@ -476,7 +426,6 @@ namespace jm_sql.Migrations
                         new
                         {
                             MovieId = 2,
-                            DirectorId = 2,
                             Rating = "R",
                             ReleaseDate = new DateOnly(2013, 12, 25),
                             Runtime = 180,
@@ -485,7 +434,6 @@ namespace jm_sql.Migrations
                         new
                         {
                             MovieId = 3,
-                            DirectorId = 3,
                             Rating = "R",
                             ReleaseDate = new DateOnly(2000, 4, 14),
                             Runtime = 104,
@@ -494,7 +442,6 @@ namespace jm_sql.Migrations
                         new
                         {
                             MovieId = 4,
-                            DirectorId = 4,
                             Rating = "PG",
                             ReleaseDate = new DateOnly(2006, 12, 17),
                             Runtime = 108,
@@ -503,7 +450,6 @@ namespace jm_sql.Migrations
                         new
                         {
                             MovieId = 5,
-                            DirectorId = 5,
                             Rating = "PG-13",
                             ReleaseDate = new DateOnly(2019, 4, 26),
                             Runtime = 181,
@@ -543,22 +489,6 @@ namespace jm_sql.Migrations
                         .HasForeignKey("MoviesMovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Movie", b =>
-                {
-                    b.HasOne("Director", "Director")
-                        .WithMany("Movies")
-                        .HasForeignKey("DirectorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Director");
-                });
-
-            modelBuilder.Entity("Director", b =>
-                {
-                    b.Navigation("Movies");
                 });
 #pragma warning restore 612, 618
         }
