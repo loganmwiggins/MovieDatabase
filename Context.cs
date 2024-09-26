@@ -43,7 +43,7 @@ public class MoviesDbContext : DbContext
             new Movie { MovieId = 4, Title = "Night at the Museum", Runtime = 108, Rating = "PG", ReleaseDate = new DateOnly(2006, 12, 17) },
             new Movie { MovieId = 5, Title = "Avengers: Endgame", Runtime = 181, Rating = "PG-13", ReleaseDate = new DateOnly(2019, 4, 26) }
         );
-
+        
         modelBuilder.Entity<Genre>().HasData(
             new Genre { GenreId = 1, Name = "Action" },
             new Genre { GenreId = 2, Name = "Adventure" },

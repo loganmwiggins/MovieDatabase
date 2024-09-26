@@ -1,3 +1,4 @@
+﻿using jm_sql;
 using Microsoft.EntityFrameworkCore;
 
 public static class Program
@@ -14,39 +15,68 @@ public static class Program
         //        Console.WriteLine(context.Students.FromSql($"SELECT * FROM \"Students\"").ToList().Count);
         //    }
 
-    //    // Begin interaction loop
-    //    bool exit = false;
-    //    while (!exit)
-    //    {
-    //        Console.WriteLine("\nWelcome to our Local Movie Database, please make a selection: \n");
-    //        Console.WriteLine("q    Quit the application.");
-    //        Console.WriteLine("a    Add assignment.");
-    //        Console.WriteLine("s    Add student.");
-    //        Console.WriteLine("g    Add or update grade.");
-    //        Console.WriteLine("d    Delete a grade.");
-    //        Console.WriteLine("v    View data.\n");
+        Console.Clear();
+        Helpers.PrintWelcome();
 
-    //        var input = Console.ReadKey(intercept: true).Key;
-    //        switch (input)
-    //        {
-    //            case ConsoleKey.Q:
-    //                exit = true;
-    //                break;
-    //            case ConsoleKey.A:
-    //                AddMovie();
-    //                break;
-    //            case ConsoleKey.V:
-    //                ViewMovie();
-    //                break;
-    //            case ConsoleKey.D:
-    //                DeleteMovie();
-    //                break;
-    //            default:
-    //                Console.WriteLine("Invalid selection. Try again.");
-    //                break;
-    //        }
-    //    }
-    //}
+        Helpers.DisplayMovieList();
+
+        // Begin interaction loop
+        bool exit = false;
+        while (!exit)
+        {
+            Console.WriteLine("\n---");
+            Console.WriteLine("PLEASE MAKE A SELECTION:");
+            Console.WriteLine("---\n");
+            
+            Console.WriteLine("[V]    View movie details.");
+            Console.WriteLine("[A]    Add or update movie.");
+            Console.WriteLine("[D]    Delete a movie.");
+            Console.WriteLine("[Q]    Quit the application.\n");
+
+
+            var input = Console.ReadKey(intercept: true).Key;
+            switch (input)
+            {
+                case ConsoleKey.V:
+                    using (var context = new MoviesDbContext())
+                    {
+                        string? movieNum = Helpers.GetUserInput($"Which movie would you like to view? [1-{context.Movies.Count()}]:");
+
+                        // User choice input validation - keep asking for movie num if input is null/empty, is not a number, is greather than movie count, or is less than 1
+                        while (true)
+                        {
+                            if (string.IsNullOrEmpty(movieNum) || !int.TryParse(movieNum, out int result) || int.Parse(movieNum) > context.Movies.Count() || int.Parse(movieNum) < 1)
+                            {
+                                Helpers.SetConsoleColor("yellow");
+                                Console.WriteLine("⚠️ Invalid selection...\n");
+                                Helpers.ResetConsoleColor();
+                                movieNum = Helpers.GetUserInput($"Which movie would you like to view? [1-{context.Movies.Count()}]:");
+                            }
+                            else break;
+                        }
+
+                        CRUD.ViewMovieDetail(int.Parse(movieNum));
+                    }
+                    break;
+
+                case ConsoleKey.A:
+                    CRUD.AddMovie();
+                    break;
+
+                case ConsoleKey.D:
+                    CRUD.DeleteMovie();
+                    break;
+
+                case ConsoleKey.Q:
+                    exit = true;
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid selection. Try again.");
+                    break;
+            }
+        }
+    }
 
 
     //public static void AddAssignment()
@@ -190,5 +220,4 @@ public static class Program
     //        }
     //    }
     //}
-}
 }
