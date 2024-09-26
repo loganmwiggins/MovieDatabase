@@ -10,9 +10,6 @@ public static class Program
         //        // Drop and create the database
         //        // context.Database.EnsureDeleted();
         //        // context.Database.EnsureCreated();
-
-        //        // Test Entity Framework is working.
-        //        Console.WriteLine(context.Students.FromSql($"SELECT * FROM \"Students\"").ToList().Count);
         //    }
 
         Console.Clear();
@@ -24,14 +21,13 @@ public static class Program
         bool exit = false;
         while (!exit)
         {
-            Console.WriteLine("\n---");
-            Console.WriteLine("PLEASE MAKE A SELECTION:");
-            Console.WriteLine("---\n");
+            Console.WriteLine("\n➡️ WHAT NOW? SELECT:");
+            Console.WriteLine("--------------------");
             
-            Console.WriteLine("[V]    View movie details.");
-            Console.WriteLine("[A]    Add or update movie.");
-            Console.WriteLine("[D]    Delete a movie.");
-            Console.WriteLine("[Q]    Quit the application.\n");
+            Console.WriteLine("[V]   View movie details.");
+            Console.WriteLine("[A]   Add or update movie.");
+            Console.WriteLine("[D]   Delete a movie.");
+            Console.WriteLine("[Q]   Quit the application.\n");
 
 
             var input = Console.ReadKey(intercept: true).Key;
@@ -40,17 +36,17 @@ public static class Program
                 case ConsoleKey.V:
                     using (var context = new MoviesDbContext())
                     {
-                        string? movieNum = Helpers.GetUserInput($"Which movie would you like to view? [1-{context.Movies.Count()}]:");
+                        string? movieNum = Helpers.GetUserInput($"Which movie would you like to view?:");
 
-                        // User choice input validation - keep asking for movie num if input is null/empty, is not a number, is greather than movie count, or is less than 1
+                        // User choice input validation
                         while (true)
                         {
-                            if (string.IsNullOrEmpty(movieNum) || !int.TryParse(movieNum, out int result) || int.Parse(movieNum) > context.Movies.Count() || int.Parse(movieNum) < 1)
+                            if (string.IsNullOrEmpty(movieNum) || !int.TryParse(movieNum, out int result) || int.Parse(movieNum) < 1)
                             {
                                 Helpers.SetConsoleColor("yellow");
                                 Console.WriteLine("⚠️ Invalid selection...\n");
                                 Helpers.ResetConsoleColor();
-                                movieNum = Helpers.GetUserInput($"Which movie would you like to view? [1-{context.Movies.Count()}]:");
+                                movieNum = Helpers.GetUserInput($"Which movie would you like to view?:");
                             }
                             else break;
                         }
@@ -72,7 +68,9 @@ public static class Program
                     break;
 
                 default:
-                    Console.WriteLine("Invalid selection. Try again.");
+                    Helpers.SetConsoleColor("yellow");
+                    Console.WriteLine("⚠️ Invalid selection. Try again...");
+                    Helpers.ResetConsoleColor();
                     break;
             }
         }

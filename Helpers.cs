@@ -42,6 +42,9 @@ namespace jm_sql
                                                                                                 
 ");
 
+            Console.WriteLine("🎬 IN THEATERS:");
+            Console.WriteLine("--------------------");
+
             using (var context = new MoviesDbContext())
             {
                 List<Movie> movieList = context.Movies.ToList();
