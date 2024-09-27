@@ -25,6 +25,15 @@ public class MoviesDbContext : DbContext
             .WithMany(a => a.Movies)
             .UsingEntity<Character>();
 
+        // Configure many-to-many relationship
+        modelBuilder.Entity<Movie>()
+            .HasMany(m => m.Genres)
+            .WithMany(g => g.Movies)
+            .UsingEntity<Dictionary<string, object>>(
+                "MovieGenre",
+                j => j.HasOne<Genre>().WithMany().HasForeignKey("GenreId"),
+                j => j.HasOne<Movie>().WithMany().HasForeignKey("MovieId"));
+
         base.OnModelCreating(modelBuilder);
 
         // Seeding tables with data    
@@ -112,6 +121,23 @@ public class MoviesDbContext : DbContext
             new Character { CharacterId = 13, CharacterName = "Tony Stark / Iron Man", ActorId = 13, MovieId = 5 },
             new Character { CharacterId = 14, CharacterName = "Natasha Romanov / Black Widow", ActorId = 14, MovieId = 5 },
             new Character { CharacterId = 15, CharacterName = "Steve Rodgers / Captain America", ActorId = 15, MovieId = 5 }
+        );
+
+        // add genres to movies
+        modelBuilder.Entity("MovieGenre").HasData(
+            new { MovieId = 1, GenreId = 3 },
+            new { MovieId = 1, GenreId = 9 },
+            new { MovieId = 2, GenreId = 18 },
+            new { MovieId = 2, GenreId = 3 },
+            new { MovieId = 2, GenreId = 14 },
+            new { MovieId = 3, GenreId = 5 },
+            new { MovieId = 3, GenreId = 14 },
+            new { MovieId = 4, GenreId = 3 },
+            new { MovieId = 4, GenreId = 7 },
+            new { MovieId = 5, GenreId = 1 },
+            new { MovieId = 5, GenreId = 2 },
+            new { MovieId = 5, GenreId = 4 },
+            new { MovieId = 5, GenreId = 20 }
         );
     }
 }
