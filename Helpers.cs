@@ -78,6 +78,20 @@ namespace jm_sql
             }
         }
 
+        public static void DisplayGenreList()
+        {
+            using (var context = new MoviesDbContext())
+            {
+                // Display full genre list
+                List<Genre> genreList = context.Genres.ToList();
+
+                foreach (Genre genre in genreList)
+                {
+                    Console.WriteLine($"[{genre.GenreId}]   {genre.Name}");
+                }
+            }
+        }
+
 
         // Print main select menu
         public static void DisplayMainMenu()
