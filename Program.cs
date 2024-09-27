@@ -15,44 +15,17 @@ public static class Program
         Console.Clear();
         Helpers.PrintWelcome();
 
-        Helpers.DisplayMovieList();
-
         // Begin interaction loop
         bool exit = false;
         while (!exit)
         {
-            Console.WriteLine("\n➡️ WHAT NOW? SELECT:");
-            Console.WriteLine("--------------------");
+            Helpers.DisplayMainMenu();
             
-            Console.WriteLine("[V]   View movie details.");
-            Console.WriteLine("[A]   Add or update movie.");
-            Console.WriteLine("[D]   Delete a movie.");
-            Console.WriteLine("[Q]   Quit the application.\n");
-
-
             var input = Console.ReadKey(intercept: true).Key;
             switch (input)
             {
                 case ConsoleKey.V:
-                    using (var context = new MoviesDbContext())
-                    {
-                        string? movieNum = Helpers.GetUserInput($"Which movie would you like to view?:");
-
-                        // User choice input validation
-                        while (true)
-                        {
-                            if (string.IsNullOrEmpty(movieNum) || !int.TryParse(movieNum, out int result) || int.Parse(movieNum) < 1)
-                            {
-                                Helpers.SetConsoleColor("yellow");
-                                Console.WriteLine("⚠️ Invalid selection...\n");
-                                Helpers.ResetConsoleColor();
-                                movieNum = Helpers.GetUserInput($"Which movie would you like to view?:");
-                            }
-                            else break;
-                        }
-
-                        CRUD.ViewMovieDetail(int.Parse(movieNum));
-                    }
+                    Helpers.DisplayMovieList();
                     break;
 
                 case ConsoleKey.A:

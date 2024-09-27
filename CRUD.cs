@@ -87,10 +87,10 @@ namespace jm_sql
 
                 if (movie != null)
                 {
-                    Console.WriteLine("\n..............................");
+                    Console.WriteLine("\n............................................................");
                     // Print title
-                    Console.WriteLine($"🎥 {movie.Title}");
-                    Console.WriteLine("---");
+                    Console.WriteLine($"\n🎥 {movie.Title}");
+                    Console.WriteLine("--------------------");
 
                     // Print description
                     if (!string.IsNullOrEmpty(movie.Description))
@@ -113,7 +113,7 @@ namespace jm_sql
                         {
                             if (i == movie.Genres.Count() - 1)
                             {
-                                Console.Write(movie.Genres[i].Name);
+                                Console.Write($"{movie.Genres[i].Name}\n");
                             }
                             else
                             {
@@ -125,12 +125,12 @@ namespace jm_sql
                     // Print cast
                     if (movie.Actors.Count() > 0)
                     {
-                        Console.Write("\n👥 Top Cast: ");
+                        Console.Write("👥 Top Cast: ");
                         for (int i = 0; i < movie.Actors.Count(); i++)
                         {
                             if (i == movie.Actors.Count() - 1)
                             {
-                                Console.Write(movie.Actors[i].Name);
+                                Console.Write($"{movie.Actors[i].Name}\n");
                             }
                             else
                             {
@@ -139,7 +139,7 @@ namespace jm_sql
                         }
                     }
                     
-                    Console.WriteLine("\n..............................\n");
+                    Console.WriteLine("\n............................................................\n");
                 }
                 else
                 {
