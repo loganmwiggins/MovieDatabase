@@ -39,7 +39,35 @@ namespace jm_sql
                     string? movieRating = Helpers.GetUserInput("👁️ Enter movie MPA rating:");
                     DateOnly movieReleaseDate = DateOnly.Parse(Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):"));
 
-                    context.Movies.Add(new Movie { Title = movieTitle, Description = movieDescription, Runtime = movieRuntime, Rating = movieRating, ReleaseDate = movieReleaseDate });
+                    // display genre list
+                    Helpers.DisplayGenreList();
+
+                    // ask the user for the genres they want the movie to have
+                    string? genres = Helpers.GetUserInput(("🍿 Enter movie genre(s) separated by commas:"));
+                    // get the genres
+                    string[] genreList = genres.Split(',');
+
+                    // parse to ints
+                    int[] genreIds = new int[genreList.Length];
+                    for (int i = 0; i < genreList.Length; i++)
+                    {
+                        genreIds[i] = int.Parse(genreList[i]);
+                    }
+
+                    // create a new movie object
+                    Movie newMovie = new Movie { Title = movieTitle, Description = movieDescription, Runtime = movieRuntime, Rating = movieRating, ReleaseDate = movieReleaseDate };
+
+                    // add each genre to the movie
+                    foreach (int genre in genreIds)
+                    {
+                        Genre genre1 = context.Genres.FirstOrDefault(a => a.GenreId == genre);
+                        newMovie.Genres.Add(genre1);
+                    }
+
+                    // add the new movie to the database
+                    context.Movies.Add(newMovie);
+
+                    // save changes to the database
                     context.SaveChanges();
 
                     Helpers.SetConsoleColor("green");
@@ -59,7 +87,21 @@ namespace jm_sql
                     string? editedDescription = Helpers.GetUserInput("📄 Updated movie description [press enter to skip]:");
                     int editedRuntime = int.Parse(Helpers.GetUserInput("🕑 Updated movie runtime [required]:"));
                     string? editedRating = Helpers.GetUserInput("👁️ Updated movie MPA rating [press enter to skip]:");
-                    DateOnly editedReleaseDate = DateOnly.Parse(Helpers.GetUserInput("📅 Updated movie release date (YYYY/MM/DD) [press enter to skip]:"));
+                    DateOnly editedReleaseDate = DateOnly.Parse(Helpers.GetUserInput("📅 Updated movie release date (YYYY/MM/DD) [required]:"));
+
+                    // display genre list
+                    Helpers.DisplayGenreList();
+
+                    // ask the user for the genres they want the movie to have
+                    string? editedGenres = Helpers.GetUserInput(("🍿 Updated ID(s) of movie genre(s) separated by commas [press enter to skip]:"));
+                    // get the genres
+                    string[] editedGenreList = editedGenres.Split(',');
+                    // parse to ints
+                    int[] genreIds = new int[editedGenreList.Length];
+                    for (int i = 0; i < editedGenreList.Length; i++)
+                    {
+                        genreIds[i] = int.Parse(editedGenreList[i]);
+                    }
 
                     if (!string.IsNullOrEmpty(editedTitle)) {
                         existingMovie.Title = editedTitle;
@@ -79,6 +121,19 @@ namespace jm_sql
                     if (editedReleaseDate != null)
                     {
                         existingMovie.ReleaseDate = editedReleaseDate;
+                    }
+
+                    // add the new genres if the genrelist isnt null
+                    if (editedGenreList != null)
+                    {
+                        // clear the existing genres
+                        existingMovie.Genres.Clear();
+                        // add the new genres
+                        foreach (int genre in genreIds)
+                        {
+                            Genre genre1 = context.Genres.FirstOrDefault(a => a.GenreId == genre);
+                            existingMovie.Genres.Add(genre1);
+                        }
                     }
 
                     context.SaveChanges();
