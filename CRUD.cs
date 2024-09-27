@@ -14,37 +14,52 @@ namespace jm_sql
         {
             using (var context = new MoviesDbContext())
             {
-                string? movieTitle = Helpers.GetUserInput("Enter movie title you want to add or update:");
+                string? movieTitle = Helpers.GetUserInput("🎥 Enter movie title to add or update:");
 
-                // if the movie title already exists in the database, it will be updated
+                while (true)    // Input validation - must enter a title (can't be null)
+                {
+                    if (string.IsNullOrEmpty(movieTitle))
+                    {
+                        Helpers.SetConsoleColor("yellow");
+                        Console.WriteLine("⚠️ Invalid selection. Try again...\n");
+                        Helpers.ResetConsoleColor();
+                        movieTitle = Helpers.GetUserInput($"🎥 Enter movie title to add or update:");
+                    }
+                    else break;
+                }
+
+                // If the movie title already exists in the database, it will be updated
                 var existingMovie = context.Movies.FirstOrDefault(a => a.Title == movieTitle);
 
-                // adding a new movie
+                // Adding a new movie
                 if (existingMovie == null)
                 {
-                    string? movieDescription = Helpers.GetUserInput("Enter movie description:");
-                    int movieRuntime = int.Parse(Helpers.GetUserInput("Enter movie runtime in minutes:"));
-                    string? movieRating = Helpers.GetUserInput("Enter movie MPA rating:");
-                    DateOnly movieReleaseDate = DateOnly.Parse(Helpers.GetUserInput("Enter movie release date (YYYY/MM/DD):"));
+                    string? movieDescription = Helpers.GetUserInput("📄 Enter movie description:");
+                    int movieRuntime = int.Parse(Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):"));
+                    string? movieRating = Helpers.GetUserInput("👁️ Enter movie MPA rating:");
+                    DateOnly movieReleaseDate = DateOnly.Parse(Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):"));
 
                     context.Movies.Add(new Movie { Title = movieTitle, Description = movieDescription, Runtime = movieRuntime, Rating = movieRating, ReleaseDate = movieReleaseDate });
                     context.SaveChanges();
 
                     Helpers.SetConsoleColor("green");
-                    Console.WriteLine("Movie added successfully.");
+                    Console.WriteLine("\n✅ Movie added successfully.");
                     Helpers.ResetConsoleColor();
 
-                    Helpers.DisplayMovieList();
+                    ViewMovieDetail(context.Movies.FirstOrDefault(a => a.Title == movieTitle).MovieId);
                 }
-                // updating an existing movie
+                // Updating an existing movie
                 else
                 {
-                    Console.WriteLine("Entering edit mode.");
-                    string? editedTitle = Helpers.GetUserInput("If you wish to update the movie's title, enter it here, otherwise press enter.");
-                    string? editedDescription = Helpers.GetUserInput("Enter new movie description or enter to keep as is:");
-                    int editedRuntime = int.Parse(Helpers.GetUserInput("Enter new movie runtime in minutes or enter to keep as is:"));
-                    string? editedRating = Helpers.GetUserInput("Enter new movie MPA rating or enter to keep as is:");
-                    DateOnly editedReleaseDate = DateOnly.Parse(Helpers.GetUserInput("Enter new movie release date (YYYY/MM/DD) or enter to keep as is:"));
+                    Helpers.SetConsoleColor("yellow");
+                    Console.WriteLine("\n✏️ Entering edit mode...\n");
+                    Helpers.ResetConsoleColor(); 
+
+                    string? editedTitle = Helpers.GetUserInput("🎥 Updated movie title [press enter to skip]:");
+                    string? editedDescription = Helpers.GetUserInput("📄 Updated movie description [press enter to skip]:");
+                    int editedRuntime = int.Parse(Helpers.GetUserInput("🕑 Updated movie runtime [required]:"));
+                    string? editedRating = Helpers.GetUserInput("👁️ Updated movie MPA rating [press enter to skip]:");
+                    DateOnly editedReleaseDate = DateOnly.Parse(Helpers.GetUserInput("📅 Updated movie release date (YYYY/MM/DD) [press enter to skip]:"));
 
                     if (!string.IsNullOrEmpty(editedTitle)) {
                         existingMovie.Title = editedTitle;
@@ -66,10 +81,13 @@ namespace jm_sql
                         existingMovie.ReleaseDate = editedReleaseDate;
                     }
 
-                    Helpers.SetConsoleColor("green");
-                    Console.WriteLine("Movie updated successfully.");
-                    Helpers.ResetConsoleColor();
                     context.SaveChanges();
+
+                    Helpers.SetConsoleColor("green");
+                    Console.WriteLine("\n✅ Movie updated successfully.");
+                    Helpers.ResetConsoleColor();
+
+                    ViewMovieDetail(context.Movies.FirstOrDefault(a => a.Title == existingMovie.Title).MovieId);
                 }
             }
         }
@@ -90,7 +108,7 @@ namespace jm_sql
                     Console.WriteLine("\n............................................................");
                     // Print title
                     Console.WriteLine($"\n🎥 {movie.Title}");
-                    Console.WriteLine("--------------------");
+                    Console.WriteLine("------------------------------");
 
                     // Print description
                     if (!string.IsNullOrEmpty(movie.Description))
