@@ -36,45 +36,76 @@ namespace jm_sql
                 if (existingMovie == null)
                 {
                     string? movieDescription = Helpers.GetUserInput("📄 Enter movie description:");
-                    string input = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
-                    int movieRuntime = Regex.IsMatch(input, @"^\d+$") ? int.Parse(input) : -1;
-                    if (movieRuntime < 0)
+                    string? rtInput = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
+
+                    // Input validation for runtime
+                    while (true)
                     {
-                        Console.WriteLine("Invalid movie runtime ... Aborting");
-                        return;
+                        if (string.IsNullOrEmpty(rtInput))
+                        {
+                            Helpers.SetConsoleColor("yellow");
+                            Console.WriteLine("\n⚠️ Runtime cannot be null...");
+                            Helpers.ResetConsoleColor();
+                            rtInput = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
+                        }
+                        else break;
                     }
+
+                    int movieRuntime = Regex.IsMatch(rtInput, @"^\d+$") ? int.Parse(rtInput) : -1;
+
+                    while (movieRuntime < 0)
+                    {
+                        if (string.IsNullOrEmpty(rtInput))
+                        {
+                            Helpers.SetConsoleColor("yellow");
+                            Console.WriteLine("\n⚠️ Runtime cannot be null...");
+                            Helpers.ResetConsoleColor();
+                            rtInput = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
+                        }
+                        else
+                        {
+                            movieRuntime = Regex.IsMatch(rtInput, @"^\d+$") ? int.Parse(rtInput) : -1;
+
+                            if (movieRuntime < 0)
+                            {
+                                Helpers.SetConsoleColor("red");
+                                Console.WriteLine("\n❌ Invalid movie runtime...");
+                                Helpers.ResetConsoleColor();
+                                rtInput = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
+                            }
+                            else break;
+                        }
+                    }
+
                     string? movieRating = Helpers.GetUserInput("👁️ Enter movie MPA rating:");
                     DateOnly movieReleaseDate = DateOnly.Parse(Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):"));
 
-                    // display genre list
+                    // Display genre list
                     Helpers.DisplayGenreList();
 
-                    // ask the user for the genres they want the movie to have
+                    // Prompt user for genres
                     string? genres = Helpers.GetUserInput(("🍿 Enter movie genre(s) separated by commas:"));
-                    // get the genres
                     string[] genreList = genres.Split(',');
 
-                    // parse to ints
+                    // Parse to ints
                     int[] genreIds = new int[genreList.Length];
                     for (int i = 0; i < genreList.Length; i++)
                     {
                         genreIds[i] = int.Parse(genreList[i]);
                     }
 
-                    // create a new movie object
+                    // Create a new movie object
                     Movie newMovie = new Movie { Title = movieTitle, Description = movieDescription, Runtime = movieRuntime, Rating = movieRating, ReleaseDate = movieReleaseDate };
 
-                    // add each genre to the movie
+                    // Add each genre to the movie
                     foreach (int genre in genreIds)
                     {
                         Genre genre1 = context.Genres.FirstOrDefault(a => a.GenreId == genre);
                         newMovie.Genres.Add(genre1);
                     }
 
-                    // add the new movie to the database
+                    // Add the new movie to the database
                     context.Movies.Add(newMovie);
-
-                    // save changes to the database
                     context.SaveChanges();
 
                     Helpers.SetConsoleColor("green");
