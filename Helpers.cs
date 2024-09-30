@@ -74,10 +74,12 @@ namespace jm_sql
                 // Display full genre list
                 List<Genre> genreList = context.Genres.ToList();
 
+                Console.WriteLine("\nGenres:");
                 foreach (Genre genre in genreList)
                 {
                     Console.WriteLine($"[{genre.GenreId}]   {genre.Name}");
                 }
+                Console.WriteLine();
             }
         }
 

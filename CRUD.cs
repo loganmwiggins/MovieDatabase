@@ -93,7 +93,7 @@ namespace jm_sql
                         else break;
                     }
 
-                    DateOnly? movieReleaseDate = Regex.IsMatch(rdInput, @"^\d{4}/\d{2}/\d{2}$") ? DateOnly.Parse(rdInput) : null;
+                    DateOnly? movieReleaseDate = Regex.IsMatch(rdInput, @"^\d{4}/(0[1-9]|1[0-2])/(0[1-9]|[12]\d|3[01])$") ? DateOnly.Parse(rdInput) : null;
 
                     while (movieReleaseDate == null)
                     {
@@ -106,7 +106,7 @@ namespace jm_sql
                         }
                         else
                         {
-                            movieReleaseDate = Regex.IsMatch(rdInput, @"^\d{4}/\d{2}/\d{2}$") ? DateOnly.Parse(rdInput) : null;
+                            movieReleaseDate = Regex.IsMatch(rdInput, @"^\d{4}/(0[1-9]|1[0-2])/(0[1-9]|[12]\d|3[01])$") ? DateOnly.Parse(rdInput) : null;
 
                             if (movieReleaseDate == null)
                             {
@@ -118,8 +118,6 @@ namespace jm_sql
                             else break;
                         }
                     }
-
-                    //DateOnly movieReleaseDate = DateOnly.Parse(rdInput);
 
                     // Display genre list
                     Helpers.DisplayGenreList();
