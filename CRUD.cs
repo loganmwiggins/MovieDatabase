@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace jm_sql
@@ -35,7 +36,13 @@ namespace jm_sql
                 if (existingMovie == null)
                 {
                     string? movieDescription = Helpers.GetUserInput("📄 Enter movie description:");
-                    int movieRuntime = int.Parse(Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):"));
+                    string input = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
+                    int movieRuntime = Regex.IsMatch(input, @"^\d+$") ? int.Parse(input) : -1;
+                    if (movieRuntime < 0)
+                    {
+                        Console.WriteLine("Invalid movie runtime ... Aborting");
+                        return;
+                    }
                     string? movieRating = Helpers.GetUserInput("👁️ Enter movie MPA rating:");
                     DateOnly movieReleaseDate = DateOnly.Parse(Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):"));
 
