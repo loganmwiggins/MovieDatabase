@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
-
+//maybe some alias' for better readability
 public class Movie
 {
     public int MovieId { get; set; }
