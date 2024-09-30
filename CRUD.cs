@@ -22,9 +22,9 @@ namespace jm_sql
                     if (string.IsNullOrEmpty(movieTitle))
                     {
                         Helpers.SetConsoleColor("yellow");
-                        Console.WriteLine("⚠️ Invalid selection. Try again...\n");
+                        Console.WriteLine("⚠️ Movie title cannot be null...");
                         Helpers.ResetConsoleColor();
-                        movieTitle = Helpers.GetUserInput($"🎥 Enter movie title to add or update:");
+                        movieTitle = Helpers.GetUserInput("🎥 Enter movie title to add or update:");
                     }
                     else break;
                 }
@@ -44,7 +44,7 @@ namespace jm_sql
                         if (string.IsNullOrEmpty(rtInput))
                         {
                             Helpers.SetConsoleColor("yellow");
-                            Console.WriteLine("\n⚠️ Runtime cannot be null...");
+                            Console.WriteLine("⚠️ Runtime cannot be null...");
                             Helpers.ResetConsoleColor();
                             rtInput = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
                         }
@@ -68,8 +68,8 @@ namespace jm_sql
 
                             if (movieRuntime < 0)
                             {
-                                Helpers.SetConsoleColor("red");
-                                Console.WriteLine("❌ Invalid movie runtime...");
+                                Helpers.SetConsoleColor("yellow");
+                                Console.WriteLine("⚠️ Invalid movie runtime...");
                                 Helpers.ResetConsoleColor();
                                 rtInput = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
                             }
@@ -79,6 +79,19 @@ namespace jm_sql
 
                     string? movieRating = Helpers.GetUserInput("👁️ Enter movie MPA rating:");
 
+                    // Input validation for movieRating
+                    while (true)
+                    {
+                        if (string.IsNullOrEmpty(movieRating) || (movieRating != "G" && movieRating != "PG" && movieRating != "PG-13" && movieRating != "R" && movieRating != "UR"))
+                        {
+                            Helpers.SetConsoleColor("yellow");
+                            Console.WriteLine("⚠️ Invalid movie rating (enter G, PG, PG-13, R, or UR)...");
+                            Helpers.ResetConsoleColor();
+                            movieRating = Helpers.GetUserInput("👁️ Enter movie MPA rating:");
+                        }
+                        else break;
+                    }
+
                     // Input validation for release date
                     string? rdInput = Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):");
                     while (true)
@@ -86,7 +99,7 @@ namespace jm_sql
                         if (string.IsNullOrEmpty(rdInput))
                         {
                             Helpers.SetConsoleColor("yellow");
-                            Console.WriteLine("\n⚠️ Release date cannot be null...");
+                            Console.WriteLine("⚠️ Release date cannot be null...");
                             Helpers.ResetConsoleColor();
                             rdInput = Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):");
                         }
@@ -110,7 +123,7 @@ namespace jm_sql
 
                             if (movieReleaseDate == null)
                             {
-                                Helpers.SetConsoleColor("red");
+                                Helpers.SetConsoleColor("yellow");
                                 Console.WriteLine("⚠️ Invalid movie release date...");
                                 Helpers.ResetConsoleColor();
                                 rdInput = Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):");
