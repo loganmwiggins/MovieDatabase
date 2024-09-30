@@ -58,7 +58,7 @@ namespace jm_sql
                         if (string.IsNullOrEmpty(rtInput))
                         {
                             Helpers.SetConsoleColor("yellow");
-                            Console.WriteLine("\n⚠️ Runtime cannot be null...");
+                            Console.WriteLine("⚠️ Runtime cannot be null...");
                             Helpers.ResetConsoleColor();
                             rtInput = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
                         }
@@ -69,7 +69,7 @@ namespace jm_sql
                             if (movieRuntime < 0)
                             {
                                 Helpers.SetConsoleColor("red");
-                                Console.WriteLine("\n❌ Invalid movie runtime...");
+                                Console.WriteLine("❌ Invalid movie runtime...");
                                 Helpers.ResetConsoleColor();
                                 rtInput = Helpers.GetUserInput("🕑 Enter movie runtime (in minutes):");
                             }
@@ -78,7 +78,48 @@ namespace jm_sql
                     }
 
                     string? movieRating = Helpers.GetUserInput("👁️ Enter movie MPA rating:");
-                    DateOnly movieReleaseDate = DateOnly.Parse(Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):"));
+
+                    // Input validation for release date
+                    string? rdInput = Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):");
+                    while (true)
+                    {
+                        if (string.IsNullOrEmpty(rdInput))
+                        {
+                            Helpers.SetConsoleColor("yellow");
+                            Console.WriteLine("\n⚠️ Release date cannot be null...");
+                            Helpers.ResetConsoleColor();
+                            rdInput = Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):");
+                        }
+                        else break;
+                    }
+
+                    DateOnly? movieReleaseDate = Regex.IsMatch(rdInput, @"^\d{4}/\d{2}/\d{2}$") ? DateOnly.Parse(rdInput) : null;
+
+                    while (movieReleaseDate == null)
+                    {
+                        if (string.IsNullOrEmpty(rdInput))
+                        {
+                            Helpers.SetConsoleColor("yellow");
+                            Console.WriteLine("⚠️ Release date cannot be null...");
+                            Helpers.ResetConsoleColor();
+                            rdInput = Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):");
+                        }
+                        else
+                        {
+                            movieReleaseDate = Regex.IsMatch(rdInput, @"^\d{4}/\d{2}/\d{2}$") ? DateOnly.Parse(rdInput) : null;
+
+                            if (movieReleaseDate == null)
+                            {
+                                Helpers.SetConsoleColor("red");
+                                Console.WriteLine("⚠️ Invalid movie release date...");
+                                Helpers.ResetConsoleColor();
+                                rdInput = Helpers.GetUserInput("📅 Enter movie release date (YYYY/MM/DD):");
+                            }
+                            else break;
+                        }
+                    }
+
+                    //DateOnly movieReleaseDate = DateOnly.Parse(rdInput);
 
                     // Display genre list
                     Helpers.DisplayGenreList();
@@ -95,7 +136,7 @@ namespace jm_sql
                     }
 
                     // Create a new movie object
-                    Movie newMovie = new Movie { Title = movieTitle, Description = movieDescription, Runtime = movieRuntime, Rating = movieRating, ReleaseDate = movieReleaseDate };
+                    Movie newMovie = new Movie { Title = movieTitle, Description = movieDescription, Runtime = movieRuntime, Rating = movieRating, ReleaseDate = (DateOnly)movieReleaseDate };
 
                     // Add each genre to the movie
                     foreach (int genre in genreIds)
