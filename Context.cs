@@ -18,7 +18,7 @@ public class MoviesDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // tell EF core to use the characters table to
+        // Tell EF core to use the characters table to
         // determine the relationship between actors and movies
         modelBuilder.Entity<Movie>()
             .HasMany(m => m.Actors)
@@ -37,14 +37,6 @@ public class MoviesDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Seeding tables with data    
-        //modelBuilder.Entity<Director>().HasData(
-        //    new Director { DirectorId = 1, Name = "Gil Junger" },
-        //    new Director { DirectorId = 2, Name = "Martin Scorsese" },
-        //    new Director { DirectorId = 3, Name = "Mary Harron" },
-        //    new Director { DirectorId = 4, Name = "Shawn Levy" },
-        //    new Director { DirectorId = 5, Name = "Russo Brothers" }
-        //);
-
         modelBuilder.Entity<Movie>().HasData(
             new Movie { MovieId = 1, Title = "10 Things I Hate About You", Runtime = 97, Rating = "PG-13", ReleaseDate = new DateOnly(1999, 3, 31) },
             new Movie { MovieId = 2, Title = "The Wolf of Wall Street", Runtime = 180, Rating = "R", ReleaseDate = new DateOnly(2013, 12, 25) },
@@ -123,7 +115,6 @@ public class MoviesDbContext : DbContext
             new Character { CharacterId = 15, CharacterName = "Steve Rodgers / Captain America", ActorId = 15, MovieId = 5 }
         );
 
-        // add genres to movies
         modelBuilder.Entity("MovieGenre").HasData(
             new { MovieId = 1, GenreId = 3 },
             new { MovieId = 1, GenreId = 9 },
@@ -139,5 +130,13 @@ public class MoviesDbContext : DbContext
             new { MovieId = 5, GenreId = 4 },
             new { MovieId = 5, GenreId = 20 }
         );
+
+        //modelBuilder.Entity<Director>().HasData(
+        //    new Director { DirectorId = 1, Name = "Gil Junger" },
+        //    new Director { DirectorId = 2, Name = "Martin Scorsese" },
+        //    new Director { DirectorId = 3, Name = "Mary Harron" },
+        //    new Director { DirectorId = 4, Name = "Shawn Levy" },
+        //    new Director { DirectorId = 5, Name = "Russo Brothers" }
+        //);
     }
 }

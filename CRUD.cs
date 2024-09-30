@@ -217,13 +217,14 @@ namespace jm_sql
                 else
                 {
                     Helpers.SetConsoleColor("red");
-                    Console.WriteLine("Movie not found.");
+                    Console.WriteLine("❌ Movie not found.");
                     Helpers.ResetConsoleColor();
                 }
             }
         }
 
 
+        // DELETE MOVIE
         public static void DeleteMovie()
         {
             using (var context = new MoviesDbContext())

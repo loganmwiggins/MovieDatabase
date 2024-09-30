@@ -33,7 +33,7 @@ public class Genre
 }
 
 
-// this is a table to link one actor to their character name in one movie
+// Association table between Movie and Actor
 public class Character
 {
     [ForeignKey("Movie")]
