@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using jm_sql;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -267,3 +268,11 @@ namespace jm_sql
         }
     }
 }
+//// Continuously prompts the user for input until a valid (non-null and non-whitespace) movie title is provided.
+//while (string.IsNullOrWhiteSpace(movieTitle))
+//{
+//    Helpers.SetConsoleColor("yellow");
+//    Console.WriteLine(" Invalid selection. Try again...\n");
+//    Helpers.ResetConsoleColor();
+//    movieTitle = Helpers.GetUserInput("🎥 Enter movie title to add or update:");
+
